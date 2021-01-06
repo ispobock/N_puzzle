@@ -221,17 +221,16 @@ class Solver:
         q = PriorityQueue() # use a priority queue to find the best node (with the smallest f) to take
         q.put(self.puzzle)
         seen = set() # to avoid repetition
-        seen.add(self.puzzle.__repr__())
 
         while not q.empty():
             node = q.get()
+            if node.__repr__() in seen:
+                continue
+            seen.add(node.__repr__())
             if node.is_solved():
                 return node.path()
-
             for nb in node.neighbors(record_parent=True):
-                if nb.__repr__() not in seen:
-                    q.put(nb)
-                    seen.add(nb.__repr__())
+                q.put(nb)
 
 def make_goal(s):
     """Generate a goal board with an given size
